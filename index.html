@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lucky Scratch Incremental — "Number Go Up"</title>
+  <meta name="description" content="Juego incremental adictivo de rasca y gana con números infinitos, ayudantes mecánicos y transmutación de prestigio.">
+  <meta name="theme-color" content="#f1c40f">
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪙</text></svg>">
+
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+
+  <!-- Encabezado y 1 Único H1 Semántico -->
+  <header class="game-header">
+    <div class="brand-section">
+      <span class="brand-icon">🪙</span>
+      <div>
+        <h1 class="game-title">Lucky Scratch Incremental</h1>
+        <p class="tagline">"Number Go Up" — Alquimia & Fortuna Infinita</p>
+      </div>
+    </div>
+
+    <!-- HUD Superior de Recursos -->
+    <div class="hud-bar" role="region" aria-label="Recursos y Divisas">
+      <div class="stat-pill coins" title="Monedas de Oro acumuladas">
+        <span class="stat-icon">🪙</span>
+        <div class="stat-content">
+          <span class="stat-label">Monedas</span>
+          <span class="stat-value" id="hud-coins">0</span>
+        </div>
+      </div>
+
+      <div class="stat-pill clovers" title="Tréboles de la suerte que multiplican las probabilidades">
+        <span class="stat-icon">🍀</span>
+        <div class="stat-content">
+          <span class="stat-label">Tréboles</span>
+          <span class="stat-value" id="hud-clovers">0</span>
+        </div>
+      </div>
+
+      <div class="stat-pill shards" title="Fragmentos de Prisma Dorado de Prestigio">
+        <span class="stat-icon">🔮</span>
+        <div class="stat-content">
+          <span class="stat-label">Prismas</span>
+          <span class="stat-value" id="hud-shards">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones de Acción Global -->
+    <div class="header-actions">
+      <button id="btn-open-prestige" class="btn-icon btn-prestige-nav" title="Menú de Transmutación Dorada (Prestigio)">
+        <span>🔮</span> Transmutación
+      </button>
+      <button id="btn-open-stats" class="btn-icon" title="Estadísticas e Historial">
+        <span>📊</span> Stats
+      </button>
+      <button id="btn-open-settings" class="btn-icon" title="Opciones y Guardado">
+        <span>⚙️</span> Guardado
+      </button>
+    </div>
+  </header>
+
+  <!-- Contenedor Principal de Juego -->
+  <main class="game-container">
+
+    <!-- Panel Izquierdo: Selección de Tarjetas -->
+    <aside class="side-panel cards-panel">
+      <div class="panel-header">
+        <h2><span>🗂️</span> Tarjetas de Fortuna</h2>
+      </div>
+      <div class="card-selector-list" id="cards-selector-container">
+        <!-- Renderizado dinámicamente desde cards.json -->
+      </div>
+    </aside>
+
+    <!-- Área Central: El Raspador y la Tarjeta -->
+    <section class="scratch-arena">
+      <div class="arena-controls">
+        <div class="progress-container" title="Porcentaje raspado de la tarjeta actual">
+          <div class="progress-fill" id="scratch-progress-fill"></div>
+          <span class="progress-text" id="scratch-progress-text">0%</span>
+        </div>
+        <button id="btn-next-card" class="btn-new-card">Nueva Tarjeta (Auto)</button>
+      </div>
+
+      <!-- El Contenedor de la Tarjeta Interactiva -->
+      <div class="scratch-card-box" id="scratch-card-box">
+        <!-- Contenido Subyacente (Símbolos Ocultos) -->
+        <div class="card-hidden-surface" id="card-surface">
+          <div class="card-header-bar">
+            <span class="card-name-display" id="active-card-name">Rasca Fortuna</span>
+            <span class="card-jackpot-badge" id="active-card-jackpot">Premio x5</span>
+          </div>
+          <div class="scratch-symbols-grid" id="symbols-grid">
+            <!-- Celdas de símbolos generadas dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Capa de Raspado interactiva (Canvas) -->
+        <canvas class="scratch-canvas-overlay" id="scratch-canvas" width="520" height="380"></canvas>
+        <!-- Canvas de Efectos de Partículas -->
+        <canvas class="particles-canvas" id="particles-canvas" width="520" height="380"></canvas>
+      </div>
+
+      <!-- Notificación y Resultado -->
+      <div class="scratch-result-banner" id="scratch-result-banner">
+        ¡Usa el cursor o dedo para raspar la lámina protectora y descubrir premios!
+      </div>
+    </section>
+
+    <!-- Panel Derecho: Tienda de Ayudantes y Mejoras -->
+    <aside class="side-panel upgrades-panel">
+      <div class="panel-header">
+        <h2><span>🛠️</span> Automatización & Tienda</h2>
+      </div>
+
+      <div class="shop-tabs">
+        <button class="tab-btn active" id="tab-helpers-btn">Ayudantes</button>
+        <button class="tab-btn" id="tab-upgrades-btn">Mejoras</button>
+      </div>
+
+      <div class="items-list" id="shop-items-container">
+        <!-- Renderizado dinámico de ayudantes o mejoras -->
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- Modal: Transmutación Dorada (Prestigio) -->
+  <div class="modal-overlay" id="prestige-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>🔮 Transmutación Dorada (Prestigio)</h3>
+        <button class="modal-close-btn" id="close-prestige-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Al transmutar tu imperio de rascas, disuelves todas tus monedas y ayudantes actuales a cambio de <strong>Fragmentos de Prisma Dorado</strong>.</p>
+        <br>
+        <p>Prismas que ganarás al reiniciar ahora: <strong id="prestige-gain-display" style="color: var(--prestige-purple); font-size: 1.2rem;">+0</strong></p>
+        <p>Multiplicador permanente actual: <strong id="prestige-multiplier-display">x1.00</strong></p>
+        <hr style="border-color: var(--border-subtle); margin: 12px 0;">
+        <h4>Árbol de Mejoras Cósmicas</h4>
+        <div id="prestige-upgrades-container" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+          <!-- Listado de mejoras de prestigio -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-execute-prestige" class="btn-buy" style="background: var(--prestige-purple);">Transmutar Ahora</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Estadísticas e Historial -->
+  <div class="modal-overlay" id="stats-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>📊 Estadísticas de Fortuna</h3>
+        <button class="modal-close-btn" id="close-stats-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Tarjetas raspadas en total: <strong id="stat-cards-count">0</strong></p>
+        <p>Monedas ganadas históricas: <strong id="stat-lifetime-coins">0</strong></p>
+        <p>Producción pasiva actual: <strong id="stat-passive-rate">0 / seg</strong></p>
+        <p>Velocidad de auto-raspado: <strong id="stat-auto-speed">0% / seg</strong></p>
+        <hr style="border-color: var(--border-subtle); margin: 12px 0;">
+        <h4>Historial de Rascas Recientes</h4>
+        <div id="history-container" style="max-height: 160px; overflow-y: auto; font-size: 0.8rem; margin-top: 6px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Opciones, Exportar / Importar y Guardado -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>⚙️ Opciones & Persistencia</h3>
+        <button class="modal-close-btn" id="close-settings-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>El juego guarda tu progreso automáticamente cada 30 segundos en tu navegador y es compatible con el esquema de base de datos SQLite (<code>schema.sql</code>).</p>
+        <br>
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
+          <button id="btn-export-save" class="btn-icon">📋 Exportar Partida</button>
+          <button id="btn-import-save" class="btn-icon">📥 Importar Partida</button>
+        </div>
+        <textarea id="save-transfer-text" rows="3" style="width: 100%; background: #111422; color: #fff; border: 1px solid var(--border-subtle); border-radius: 6px; padding: 8px; font-family: var(--font-mono); font-size: 0.75rem;" placeholder="Pega aquí tu código de guardado..."></textarea>
+        <hr style="border-color: var(--border-subtle); margin: 12px 0;">
+        <button id="btn-hard-reset" class="btn-icon" style="color: var(--danger-crimson); border-color: var(--danger-crimson);">⚠️ Reinicio Total de Fábrica</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Progreso Fuera de Línea (Offline) -->
+  <div class="modal-overlay" id="offline-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>🌙 ¡Bienvenido de vuelta!</h3>
+        <button class="modal-close-btn" id="close-offline-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Tus ayudantes mecánicos siguieron trabajando arduamente mientras estabas fuera.</p>
+        <p>Tiempo transcurrido: <strong id="offline-time-display">0 min</strong></p>
+        <p>Monedas generadas pasivamente: <strong id="offline-coins-display" style="color: var(--gold-primary); font-size: 1.15rem;">+0</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-collect-offline" class="btn-new-card">Recoger Ganancias</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie de página -->
+  <footer class="game-footer">
+    <p>Lucky Scratch Incremental &bull; Simulación lúdica de fortuna 100% libre de dinero real &bull; v1.0.0</p>
+  </footer>
+
+  <!-- Script Principal de la Aplicación -->
+  <script type="module" src="src/main.js"></script>
+
+</body>
+</html>

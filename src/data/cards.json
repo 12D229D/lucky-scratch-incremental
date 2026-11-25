@@ -1,0 +1,92 @@
+[
+  {
+    "id": "card_basic",
+    "name": "Rasca Fortuna Diaria",
+    "rarity": "Común",
+    "cost": { "m": 0, "e": 0 },
+    "baseReward": { "m": 10, "e": 0 },
+    "cloverReward": 1,
+    "scratchGrid": { "cols": 3, "rows": 3 },
+    "description": "Una tarjeta clásica de la suerte. Encuentra 3 tréboles o monedas para ganar el premio mayor.",
+    "theme": {
+      "foilColor": "#a0aab2",
+      "scratchTexture": "silver",
+      "accentColor": "#f1c40f",
+      "pattern": "dots"
+    },
+    "modifier": "none",
+    "jackpotMultiplier": 5
+  },
+  {
+    "id": "card_emerald_clover",
+    "name": "Trébol Quimérico de la Suerte",
+    "rarity": "Rara",
+    "cost": { "m": 250, "e": 0 },
+    "baseReward": { "m": 1.5, "e": 3 },
+    "cloverReward": 5,
+    "scratchGrid": { "cols": 3, "rows": 3 },
+    "description": "Bañada en esmeralda líquida. Los tréboles otorgan un multiplicador de x2 a todas las recompensas.",
+    "theme": {
+      "foilColor": "#27ae60",
+      "scratchTexture": "emerald",
+      "accentColor": "#2ecc71",
+      "pattern": "clovers"
+    },
+    "modifier": "clover_boost",
+    "jackpotMultiplier": 12
+  },
+  {
+    "id": "card_cursed_greed",
+    "name": "Pacto Maldito del Avaro",
+    "rarity": "Maldita",
+    "cost": { "m": 5, "e": 4 },
+    "baseReward": { "m": 8, "e": 5 },
+    "cloverReward": 25,
+    "scratchGrid": { "cols": 4, "rows": 3 },
+    "description": "Riesgo extremo: Raspas casillas con cráneos o cofres dorados. Si raspas un cráneo pierdes el 20% del premio base, pero 3 cofres dan x50.",
+    "theme": {
+      "foilColor": "#8e44ad",
+      "scratchTexture": "obsidian",
+      "accentColor": "#e74c3c",
+      "pattern": "skulls"
+    },
+    "modifier": "high_risk",
+    "jackpotMultiplier": 50
+  },
+  {
+    "id": "card_cosmic_nova",
+    "name": "Nebulosa Cósmica Cuántica",
+    "rarity": "Épica",
+    "cost": { "m": 1.2, "e": 7 },
+    "baseReward": { "m": 4.5, "e": 8 },
+    "cloverReward": 150,
+    "scratchGrid": { "cols": 4, "rows": 4 },
+    "description": "Fuerzas estelares comprimidas. Cada casilla raspada desencadena una reacción en cadena aumentando el multiplicador.",
+    "theme": {
+      "foilColor": "#2980b9",
+      "scratchTexture": "starlight",
+      "accentColor": "#00d2d3",
+      "pattern": "stars"
+    },
+    "modifier": "chain_reaction",
+    "jackpotMultiplier": 100
+  },
+  {
+    "id": "card_mythic_midas",
+    "name": "Toque Dorado de Midas",
+    "rarity": "Mítica",
+    "cost": { "m": 3, "e": 11 },
+    "baseReward": { "m": 2, "e": 13 },
+    "cloverReward": 2000,
+    "scratchGrid": { "cols": 5, "rows": 4 },
+    "description": "La tarjeta suprema de los reyes alquimistas. Cualquier acierto convierte el premio en trillones dorados permanentes.",
+    "theme": {
+      "foilColor": "#f39c12",
+      "scratchTexture": "pure_gold",
+      "accentColor": "#ffeaa7",
+      "pattern": "crowns"
+    },
+    "modifier": "midas_touch",
+    "jackpotMultiplier": 500
+  }
+]
